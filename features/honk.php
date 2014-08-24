@@ -65,4 +65,4 @@ class Improved_Heartbeat_Action_Honk {
 
 }
 
-$actions[] = new Improved_Heartbeat_Action_Honk;
+$features[] = new Improved_Heartbeat_Action_Honk;

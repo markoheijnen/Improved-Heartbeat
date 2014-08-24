@@ -14,15 +14,15 @@ class Improved_Heartbeat {
 	private $dispatcher;
 
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'load_actions' ) );
+		add_action( 'plugins_loaded', array( $this, 'load_features' ) );
 
 		$this->dispatcher = new Improved_Heartbeat_Dispatcher;
 	}
 
-	public function load_actions() {
-		$actions = array();
+	public function load_features() {
+		$features = array();
 
-		include 'actions/honk.php';
+		include 'features/honk.php';
 	}
 
 }
