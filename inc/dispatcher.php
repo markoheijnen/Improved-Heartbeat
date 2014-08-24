@@ -4,8 +4,6 @@ class Improved_Heartbeat_Dispatcher {
 	const option = 'heartbeat_actions';
 	private static $running = false;
 
-	private $actions;
-
 	public function __construct() {
 		add_filter( 'heartbeat_send', array( $this, 'run' ), 10, 2 );
 	}
