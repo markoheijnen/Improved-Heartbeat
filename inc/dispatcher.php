@@ -10,27 +10,35 @@ class Improved_Heartbeat_Dispatcher {
 		add_filter( 'heartbeat_send', array( $this, 'run' ), 10, 2 );
 	}
 
-	public static function get( $key ) {
-		$actions = get_option( self::option, array() );
+	public static function get( $key, $screen_id = null ) {
+		if ( ! $screen_id ) {
+			$screen_id = 'all';
+		}
 
-		if ( isset( $actions[ $key ] ) ) {
-			return $actions[ $key ];
+		$actions = self::get_actions();
+
+		if ( isset( $actions[ $screen_id ][ $key ] ) ) {
+			return $actions[ $screen_id ][ $key ];
 		}
 
 		return false;
 	}
 
-	public static function add( $key, $value, $overwrite = false ) {
+	public static function add( $key, $value, $screen_id = null, $overwrite = false ) {
 		$action = false;
 
+		if ( ! $screen_id ) {
+			$screen_id = 'all';
+		}
+
 		if ( ! $overwrite ) {
-			$action = self::get( $key );
+			$action = self::get( $key, $screen_id );
 		}
 
 		if ( ! $action ) {
-			$actions = get_option( self::option, array() );
+			$actions = self::get_actions();
 
-			$actions[ $key ] = $value;
+			$actions[ $screen_id ][ $key ] = $value;
 
 			update_option( self::option, $actions );
 		}
@@ -41,15 +49,23 @@ class Improved_Heartbeat_Dispatcher {
 		if ( ! self::$running ) {
 			self::$running = true;
 
-			$actions = get_option( self::option, array() );
+			$actions = $this->get_actions();
 
-			$response['screen'] = $screen_id;
-
-			foreach ( $actions as $key => $value ) {
+			foreach ( $actions['all'] as $key => $value ) {
 				$response[ $key ] = $value;
+
+				unset( $actions['all'][ $key ] );
 			}
 
-			update_option( self::option, array() );
+			if ( isset( $actions[ $screen_id ] ) ) {
+				foreach ( $actions[ $screen_id ] as $key => $value ) {
+					$response[ $key ] = $value;
+
+					unset( $actions[ $screen_id ][ $key ] );
+				}
+			}
+
+			update_option( self::option, $actions );
 
 			self::$running = false;
 		}
@@ -57,4 +73,8 @@ class Improved_Heartbeat_Dispatcher {
 		return $response;
 	}
 
+
+	private static function get_actions() {
+		return get_option( self::option, array( 'all' => array() ) );
+	}
 }
