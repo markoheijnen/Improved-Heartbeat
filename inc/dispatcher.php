@@ -46,7 +46,7 @@ class Improved_Heartbeat_Dispatcher {
 
 
 	public function run( $response, $screen_id ) {
-		if ( ! self::$running ) {
+		if ( ! self::$running && doing_action('heartbeat_send') ) {
 			self::$running = true;
 
 			$actions = $this->get_actions();
