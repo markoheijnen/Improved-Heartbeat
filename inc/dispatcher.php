@@ -8,6 +8,7 @@ class Improved_Heartbeat_Dispatcher {
 		add_filter( 'heartbeat_send', array( $this, 'run' ), 10, 2 );
 	}
 
+
 	public static function get( $key, $screen_id = null ) {
 		if ( ! $screen_id ) {
 			$screen_id = 'all';
@@ -15,7 +16,7 @@ class Improved_Heartbeat_Dispatcher {
 
 		$actions = self::get_actions();
 
-		if ( isset( $actions[ $screen_id ][ $key ] ) ) {
+		if ( isset( $actions[ $screen_id ], $actions[ $screen_id ][ $key ] ) ) {
 			return $actions[ $screen_id ][ $key ];
 		}
 
@@ -38,8 +39,10 @@ class Improved_Heartbeat_Dispatcher {
 
 			$actions[ $screen_id ][ $key ] = $value;
 
-			update_option( self::option, $actions );
+			return update_option( self::option, $actions );
 		}
+
+		return false;
 	}
 
 
@@ -49,21 +52,25 @@ class Improved_Heartbeat_Dispatcher {
 
 			$actions = $this->get_actions();
 
-			foreach ( $actions['all'] as $key => $value ) {
-				$response[ $key ] = $value;
-
-				unset( $actions['all'][ $key ] );
-			}
-
-			if ( isset( $actions[ $screen_id ] ) ) {
-				foreach ( $actions[ $screen_id ] as $key => $value ) {
+			if ( $actions ) {
+				// Check for all screens
+				foreach ( $actions['all'] as $key => $value ) {
 					$response[ $key ] = $value;
 
-					unset( $actions[ $screen_id ][ $key ] );
+					unset( $actions['all'][ $key ] );
 				}
-			}
 
-			update_option( self::option, $actions );
+				// Check for specific screens
+				if ( isset( $actions[ $screen_id ] ) ) {
+					foreach ( $actions[ $screen_id ] as $key => $value ) {
+						$response[ $key ] = $value;
+
+						unset( $actions[ $screen_id ][ $key ] );
+					}
+				}
+
+				update_option( self::option, $actions );
+			}
 
 			self::$running = false;
 		}
