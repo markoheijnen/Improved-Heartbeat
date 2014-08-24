@@ -24,7 +24,7 @@ class Improved_Heartbeat {
 
 		$dir = dirname( __FILE__ ) . '/features/';
 
-		$_features = apply_filters( 'improved_heartbeat_features', array( 'honk' ) );
+		$_features = apply_filters( 'improved_heartbeat_features', array( 'honk', 'yo' ) );
 
 		foreach ( $_features as $feature ) {
 			if ( file_exists( $dir . $feature . '.php' ) ) {
