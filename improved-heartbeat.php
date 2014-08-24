@@ -22,7 +22,15 @@ class Improved_Heartbeat {
 	public function load_features() {
 		$features = array();
 
-		include 'features/honk.php';
+		$dir = dirname( __FILE__ ) . '/features/';
+
+		$_features = apply_filters( 'improved_heartbeat_features', array( 'honk' ) );
+
+		foreach ( $_features as $feature ) {
+			if ( file_exists( $dir . $feature . '.php' ) ) {
+				include $dir . $feature . '.php';
+			}
+		}
 	}
 
 }
