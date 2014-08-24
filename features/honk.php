@@ -1,6 +1,6 @@
 <?php
 
-class Improved_Heartbeat_Action_Honk {
+class Improved_Heartbeat_Feature_Honk {
 	const author = 'Mike Schroder & Ryan McCue';
 
 	public function __construct() {
@@ -65,4 +65,4 @@ class Improved_Heartbeat_Action_Honk {
 
 }
 
-$features[] = new Improved_Heartbeat_Action_Honk;
+$features[] = new Improved_Heartbeat_Feature_Honk;
