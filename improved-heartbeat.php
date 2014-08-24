@@ -7,11 +7,16 @@
 	Author URI: http://www.markoheijnen.com
 */
 
+include 'inc/dispatcher.php';
+
 class Improved_Heartbeat {
 	private $actions;
+	private $dispatcher;
 
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'load_actions' ) );
+
+		$this->dispatcher = new Improved_Heartbeat_Dispatcher;
 	}
 
 	public function load_actions() {
