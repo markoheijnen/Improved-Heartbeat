@@ -43,8 +43,10 @@ class Improved_Heartbeat_Dispatcher {
 
 			$actions = get_option( self::option, array() );
 
-			foreach ( $actions as $action ) {
-				$response['wc-heartbeat-honk'] = $action;
+			$response['screen'] = $screen_id;
+
+			foreach ( $actions as $key => $value ) {
+				$response[ $key ] = $value;
 			}
 
 			update_option( self::option, array() );
