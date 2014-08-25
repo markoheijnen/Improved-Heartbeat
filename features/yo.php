@@ -53,10 +53,15 @@ class Improved_Heartbeat_Feature_Yo {
 	public function wc_heartbeat_honk_script_enqueue( $hook_suffix ) {
 		// Make sure the JS part of the Heartbeat API is loaded.
 		wp_enqueue_script( 'heartbeat' );
+		wp_enqueue_script( 'humane' );
+
+		wp_enqueue_style( 'humane-theme' );
 	}
 
 	public function wc_heartbeat_honk_js() {
-		$honk_audio = plugins_url( 'assets/car-honk.mp3', dirname( __FILE__ ) );
+		$honk_audio   = plugins_url( 'assets/car-honk.mp3', dirname( __FILE__ ) );
+		$msg_yo       = __( 'Yo!', 'improved-hearthbeat' );
+		$msg_feedback = __( 'You just yo-ed %s.', 'improved-hearthbeat' );
 		?>
 
 		<script>
@@ -73,7 +78,14 @@ class Improved_Heartbeat_Feature_Yo {
 						'user_id': link.data('userid')
 					}, 
 					function(response){
-						alert( 'You just yo-ed ' + link.data('username') );
+						var msg = '<?php echo $msg_feedback; ?>'.replace( '%s', link.data('username') );
+
+						if (typeof humane !== 'undefined') {
+							humane.log( msg );
+						}
+						else {
+							alert( msg );
+						}
 					}
 				);
 			});
@@ -84,7 +96,12 @@ class Improved_Heartbeat_Feature_Yo {
 					return;
 				}
 
-				alert( 'Yo!' );
+				if (typeof humane !== 'undefined') {
+					humane.log('<?php echo $msg_yo;?>');
+				}
+				else {
+					alert('<?php echo $msg_yo;?>');
+				}
 			});
 		});
 		</script>
