@@ -15,6 +15,7 @@ class Improved_Heartbeat {
 
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'load_features' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts_styles' ), 1 );
 
 		$this->dispatcher = new Improved_Heartbeat_Dispatcher;
 	}
@@ -31,6 +32,12 @@ class Improved_Heartbeat {
 				include $dir . $feature . '.php';
 			}
 		}
+	}
+
+	public function register_scripts_styles() {
+		wp_register_script( 'humane', plugins_url( 'assets/humane.min.js', __FILE__ ), array(), '3.2.0' );
+
+		wp_register_style( 'humane-theme', plugins_url( 'assets/bigbox.css', __FILE__ ), array(), '3.2.0' );
 	}
 
 }
