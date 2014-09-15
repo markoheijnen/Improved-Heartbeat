@@ -8,6 +8,7 @@
 */
 
 include 'inc/dispatcher.php';
+include 'inc/session-manager.php';
 
 class Improved_Heartbeat {
 	private $actions;
