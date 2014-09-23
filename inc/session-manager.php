@@ -7,7 +7,7 @@ class Improved_Heartbeat_WP_Session_Token_Manager {
 	}
 
 
-	public function attach_session_information( $session_data ) {
+	public static function attach_session_information( $session_data ) {
 		$session_data[ Improved_Heartbeat_Dispatcher::option ] = array(
 			'all' => array(),
 		);
