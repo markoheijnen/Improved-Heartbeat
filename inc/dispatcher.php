@@ -14,7 +14,7 @@ class Improved_Heartbeat_Dispatcher {
 			$screen_id = 'all';
 		}
 
-		$actions = self::get_actions();
+		$actions = Improved_Heartbeat_WP_Session_Token_Manager::get_actions();
 
 		if ( isset( $actions[ $screen_id ], $actions[ $screen_id ][ $key ] ) ) {
 			return $actions[ $screen_id ][ $key ];
@@ -24,25 +24,16 @@ class Improved_Heartbeat_Dispatcher {
 	}
 
 	public static function add( $key, $value, $screen_id = null, $overwrite = false ) {
-		$action = false;
-
 		if ( ! $screen_id ) {
 			$screen_id = 'all';
 		}
 
-		if ( ! $overwrite ) {
-			$action = self::get( $key, $screen_id );
-		}
-
-		if ( ! $action ) {
-			$actions = self::get_actions();
-
-			$actions[ $screen_id ][ $key ] = $value;
-
-			return update_option( self::option, $actions );
-		}
-
-		return false;
+		return Improved_Heartbeat_WP_Session_Token_Manager::add_action_to_all_users(
+			$key,
+			$value,
+			$screen_id,
+			$overwrite
+		);
 	}
 
 
@@ -87,14 +78,14 @@ class Improved_Heartbeat_Dispatcher {
 		if ( ! self::$running && doing_action('heartbeat_send') ) {
 			self::$running = true;
 
-			$actions      = $this->get_actions();
+			$actions      = Improved_Heartbeat_WP_Session_Token_Manager::get_actions();
 			$user_actions = $this->get_actions_for_user( get_current_user_id() );
 
 
 			if ( $actions ) {
 				$response = $this->run_actions( $response, $actions, $screen_id );
 
-				update_option( self::option, $actions );
+				Improved_Heartbeat_WP_Session_Token_Manager::update_actions( $actions );
 			}
 
 			if ( $user_actions ) {
@@ -110,11 +101,6 @@ class Improved_Heartbeat_Dispatcher {
 		return $response;
 	}
 
-
-
-	private static function get_actions() {
-		return get_option( self::option, array( 'all' => array() ) );
-	}
 
 	private static function get_actions_for_user( $user_id ) {
 		$actions = (array) get_user_meta( $user_id, self::option, true );
