@@ -19,7 +19,7 @@ class Improved_Heartbeat_WP_Session_Token_Manager {
 	}
 
 	public function get_all_sessions() {
-		$users    = $this->get_active_users()
+		$users    = $this->get_active_users();
 		$sessions = array();
 
 		foreach ( $users as $user ) {
