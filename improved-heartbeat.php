@@ -3,7 +3,7 @@
 	Plugin Name: Improved Heartbeat
 	Description: A play project to have more support in WordPress
 	Author: Marko Heijnen
-	Version: 0.1
+	Version: 0.2
 	Author URI: http://www.markoheijnen.com
 */
 
