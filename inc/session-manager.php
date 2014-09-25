@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * The current code only works when you don't overwrite the session tokens
+ * TODO: Find a way to make it that this is possible.
+ */
+
 class Improved_Heartbeat_WP_Session_Token_Manager {
 
 	public static function add_hooks() {
